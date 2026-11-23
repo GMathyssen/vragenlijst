@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Korte bevraging voor zorgverleners · Aanhoudende lichamelijke klachten</title>
+<style>
+  :root {
+    --bg: #f5f2ec;
+    --card: #ffffff;
+    --ink: #1e2a28;
+    --muted: #5b6966;
+    --accent: #2c6b5e;
+    --accent-dark: #22564b;
+    --accent-soft: #e4efeb;
+    --line: #dad4c9;
+    --err: #b3261e;
+    --err-soft: #fbeeed;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 17px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-text-size-adjust: 100%;
+  }
+  main { max-width: 640px; margin: 0 auto; padding: 28px 16px 64px; }
+
+  header { margin-bottom: 28px; }
+  .eyebrow {
+    margin: 0 0 6px;
+    color: var(--accent);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: .02em;
+  }
+  h1 { margin: 0 0 14px; font-size: 28px; line-height: 1.2; }
+  header p { margin: 0 0 12px; }
+  .sign { color: var(--muted); font-size: 15px; }
+  .sign strong { color: var(--ink); font-weight: 600; }
+
+  h2 {
+    margin: 32px 0 12px;
+    font-size: 20px;
+  }
+
+  .q {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 18px;
+    margin: 0 0 14px;
+    min-width: 0;
+  }
+  .q.invalid { border-color: var(--err); background: var(--err-soft); }
+  .qt, legend {
+    display: block;
+    padding: 0;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  legend { float: left; width: 100%; }
+  legend + * { clear: both; }
+  .hint { margin: 0 0 6px; color: var(--muted); font-size: 15px; }
+  .opt-label { font-weight: 400; color: var(--muted); }
+
+  .opt {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-top: 8px;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fff;
+    cursor: pointer;
+    transition: background .15s, border-color .15s;
+  }
+  .opt:has(input:checked) { background: var(--accent-soft); border-color: var(--accent); }
+  .opt:has(input:disabled) { opacity: .45; cursor: not-allowed; }
+  .opt input { margin: 3px 0 0; width: 20px; height: 20px; flex: none; accent-color: var(--accent); }
+  .opt b { display: block; font-weight: 600; }
+  .opt small { display: block; color: var(--muted); font-size: 15px; }
+
+  input[type=text], input[type=email], input[type=tel], textarea {
+    display: block;
+    width: 100%;
+    margin-top: 8px;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fff;
+    color: var(--ink);
+    font: inherit;
+    font-size: 16px;
+  }
+  textarea { min-height: 110px; resize: vertical; }
+  input:focus-visible, textarea:focus-visible, button:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .opt:has(input:focus-visible) { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .sub { display: block; margin-top: 12px; font-size: 15px; color: var(--muted); }
+  .sub + input { margin-top: 4px; }
+
+  .error { margin: 8px 0 0; color: var(--err); font-size: 15px; font-weight: 600; }
+  .error:empty { display: none; }
+
+  .cond {
+    margin: 28px 0 12px;
+    padding: 12px 14px;
+    border-left: 4px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 0 10px 10px 0;
+    font-size: 15px;
+  }
+
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+  button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 16px;
+    border: 0;
+    border-radius: 12px;
+    background: var(--accent);
+    color: #fff;
+    font: inherit;
+    font-weight: 600;
+    font-size: 18px;
+    cursor: pointer;
+  }
+  button:hover { background: var(--accent-dark); }
+  button:disabled { opacity: .6; cursor: wait; }
+  #status { margin: 12px 0 0; color: var(--err); font-weight: 600; }
+  #status:empty { display: none; }
+
+  footer { margin-top: 24px; color: var(--muted); font-size: 15px; }
+  a { color: var(--accent-dark); }
+
+  #bedankt {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 28px 22px;
+    text-align: center;
+  }
+  #bedankt .check {
+    width: 56px; height: 56px;
+    margin: 0 auto 14px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    color: var(--accent);
+    display: grid; place-items: center;
+    font-size: 30px;
+  }
+  #bedankt h2 { margin: 0 0 8px; }
+  #bedankt p { margin: 0 0 8px; }
+</style>
+</head>
+<body>
+<main>
+
+  <header>
+    <p class="eyebrow">Project aanhoudende lichamelijke klachten · Kempen</p>
+    <h1>Korte bevraging voor zorgverleners</h1>
+    <p>Beste collega</p>
+    <p>Samen met Eerstelijnszone Middenkempen werken we een zorgpad uit voor volwassenen met aanhoudende lichamelijke klachten. Met deze korte vragenlijst laat u weten hoe u wilt meedoen. Het invullen duurt twee à drie minuten. Alvast bedankt!</p>
+    <p class="sign"><strong>Ruth Peeters en Wim Tops</strong><br>Therapiepraktijk De Kronkel, Lille</p>
+  </header>
+
+  <form id="form" novalidate>
+
+    <h2>Over u</h2>
+
+    <div class="q" id="q-naam">
+      <label class="qt" for="naam">Naam</label>
+      <input type="text" id="naam" name="naam" autocomplete="name">
+      <p class="error" aria-live="polite"></p>
+    </div>
+
+    <fieldset class="q" id="q-beroep">
+      <legend>Beroep</legend>
+      <label class="opt"><input type="radio" name="beroep" value="Huisarts"><span>Huisarts</span></label>
+      <label class="opt"><input type="radio" name="beroep" value="Kinesitherapeut"><span>Kinesitherapeut</span></label>
+      <label class="opt"><input type="radio" name="beroep" value="Psycholoog of orthopedagoog"><span>Psycholoog of orthopedagoog</span></label>
+      <label class="opt"><input type="radio" name="beroep" value="Arts-specialist"><span>Arts-specialist</span></label>
+      <label class="opt"><input type="radio" name="beroep" value="Andere"><span>Andere</span></label>
+      <input type="text" class="other" name="beroep_andere" data-for="beroep" placeholder="Welk beroep?" aria-label="Ander beroep" hidden>
+      <p class="error" aria-live="polite"></p>
+    </fieldset>
+
+    <div class="q" id="q-praktijk">
+      <span class="qt">Praktijk of organisatie en gemeente</span>
+      <label class="sub" for="praktijk">Praktijk of organisatie</label>
+      <input type="text" id="praktijk" name="praktijk" autocomplete="organization">
+      <label class="sub" for="gemeente">Gemeente</label>
+      <input type="text" id="gemeente" name="gemeente" autocomplete="address-level2">
+      <p class="error" aria-live="polite"></p>
+    </div>
+
+    <div class="q" id="q-contact">
+      <span class="qt">E-mail en telefoon</span>
+      <label class="sub" for="email">E-mail</label>
+      <input type="email" id="email" name="email" autocomplete="email" inputmode="email">
+      <label class="sub" for="telefoon">Telefoon <span class="opt-label">(niet verplicht)</span></label>
+      <input type="tel" id="telefoon" name="telefoon" autocomplete="tel" inputmode="tel">
+      <p class="error" aria-live="polite"></p>
+    </div>
+
+    <h2>Hoe wilt u meedoen?</h2>
+
+    <fieldset class="q" id="q-deelname">
+      <legend>Kruis aan wat bij u past</legend>
+      <p class="hint">Meerdere keuzes mogen.</p>
+      <label class="opt"><input type="checkbox" name="deelname" value="info"><span><b>Alleen de info krijgen</b><small>U krijgt de sociale kaart en de info over de aanpak van het zorgpad.</small></span></label>
+      <label class="opt"><input type="checkbox" name="deelname" value="netwerk"><span><b>In het netwerk</b><small>U staat op de lijst met uw expertise, zodat collega’s naar u kunnen doorverwijzen.</small></span></label>
+      <label class="opt"><input type="checkbox" name="deelname" value="focusgroep"><span><b>Focusgroep</b><small>U denkt mee over vorm, inhoud en organisatie van het zorgpad (twee bijeenkomsten).</small></span></label>
+      <label class="opt"><input type="checkbox" name="deelname" value="trekken"><span><b>Mee trekken</b><small>U werkt mee aan de invoering van het zorgpad.</small></span></label>
+      <p class="error" aria-live="polite"></p>
+    </fieldset>
+
+    <div id="netwerk-blok" hidden>
+      <p class="cond">U koos voor <b>het netwerk</b>. Vertel ons wat meer over uw aanbod, zodat collega’s gericht naar u kunnen doorverwijzen.</p>
+
+      <fieldset class="q" id="q-klachten">
+        <legend>Met welke klachten heeft u ervaring?</legend>
+        <p class="hint">Meerdere keuzes mogen.</p>
+        <label class="opt"><input type="checkbox" name="klachten" value="Chronische pijn of fibromyalgie"><span>Chronische pijn of fibromyalgie</span></label>
+        <label class="opt"><input type="checkbox" name="klachten" value="Chronische vermoeidheid of ME/CVS"><span>Chronische vermoeidheid of ME/CVS</span></label>
+        <label class="opt"><input type="checkbox" name="klachten" value="Prikkelbare darm of andere buikklachten"><span>Prikkelbare darm of andere buikklachten</span></label>
+        <label class="opt"><input type="checkbox" name="klachten" value="Functionele neurologische klachten"><span>Functionele neurologische klachten</span></label>
+        <label class="opt"><input type="checkbox" name="klachten" value="Andere"><span>Andere</span></label>
+        <input type="text" class="other" name="klachten_andere" data-for="klachten" placeholder="Welke klachten?" aria-label="Andere klachten" hidden>
+        <p class="error" aria-live="polite"></p>
+      </fieldset>
+
+      <fieldset class="q" id="q-aanbod">
+        <legend>Wat biedt u deze patiënten aan?</legend>
+        <p class="hint">Meerdere keuzes mogen.</p>
+        <label class="opt"><input type="checkbox" name="aanbod" value="Pijneducatie"><span>Pijneducatie</span></label>
+        <label class="opt"><input type="checkbox" name="aanbod" value="Activiteit stap voor stap opbouwen"><span>Activiteit stap voor stap opbouwen</span></label>
+        <label class="opt"><input type="checkbox" name="aanbod" value="Cognitieve gedragstherapie, ACT of mindfulness"><span>Cognitieve gedragstherapie, ACT of mindfulness</span></label>
+        <label class="opt"><input type="checkbox" name="aanbod" value="Ontspanning of ademhalingstherapie"><span>Ontspanning of ademhalingstherapie</span></label>
+        <label class="opt"><input type="checkbox" name="aanbod" value="Groepsaanbod"><span>Groepsaanbod</span></label>
+        <label class="opt"><input type="checkbox" name="aanbod" value="Andere"><span>Andere</span></label>
+        <input type="text" class="other" name="aanbod_andere" data-for="aanbod" placeholder="Welk aanbod?" aria-label="Ander aanbod" hidden>
+        <p class="error" aria-live="polite"></p>
+      </fieldset>
+
+      <div class="q" id="q-verwijzing">
+        <label class="qt" for="verwijzing">Hoe verwijzen collega’s het best naar u?</label>
+        <p class="hint">Bijvoorbeeld een e-mailadres, telefoonnummer of link naar een aanmeldformulier.</p>
+        <input type="text" id="verwijzing" name="verwijzing">
+        <p class="error" aria-live="polite"></p>
+      </div>
+
+      <fieldset class="q" id="q-wachttijd">
+        <legend>Hoe lang wacht een nieuwe patiënt ongeveer?</legend>
+        <label class="opt"><input type="radio" name="wachttijd" value="Niet of hooguit een maand"><span>Niet of hooguit een maand</span></label>
+        <label class="opt"><input type="radio" name="wachttijd" value="Een tot drie maanden"><span>Een tot drie maanden</span></label>
+        <label class="opt"><input type="radio" name="wachttijd" value="Langer dan drie maanden"><span>Langer dan drie maanden</span></label>
+        <label class="opt"><input type="radio" name="wachttijd" value="Neemt momenteel geen nieuwe patiënten"><span>Ik neem momenteel geen nieuwe patiënten</span></label>
+        <p class="error" aria-live="polite"></p>
+      </fieldset>
+
+      <fieldset class="q" id="q-kaart">
+        <legend>Mogen we uw naam, praktijk, contactgegevens en wachttijd opnemen in de sociale kaart voor collega’s?</legend>
+        <label class="opt"><input type="radio" name="socialeKaart" value="Ja"><span>Ja</span></label>
+        <label class="opt"><input type="radio" name="socialeKaart" value="Nee"><span>Nee</span></label>
+        <p class="error" aria-live="polite"></p>
+      </fieldset>
+    </div>
+
+    <h2>Tot slot</h2>
+
+    <fieldset class="q" id="q-moeilijk">
+      <legend>Wat vindt u het moeilijkst in de zorg voor deze patiënten?</legend>
+      <p class="hint">Kruis er hooguit twee aan.</p>
+      <label class="opt"><input type="checkbox" name="moeilijk" value="Uitleggen zonder dat de patiënt zich niet geloofd voelt"><span>Uitleggen wat er aan de hand is, zonder dat de patiënt zich niet geloofd voelt</span></label>
+      <label class="opt"><input type="checkbox" name="moeilijk" value="Weten naar wie ik kan doorverwijzen"><span>Weten naar wie ik kan doorverwijzen</span></label>
+      <label class="opt"><input type="checkbox" name="moeilijk" value="Afstemmen met andere zorgverleners"><span>Afstemmen met andere zorgverleners rond dezelfde patiënt</span></label>
+      <label class="opt"><input type="checkbox" name="moeilijk" value="Lange wachttijden bij anderen"><span>Lange wachttijden bij anderen</span></label>
+      <label class="opt"><input type="checkbox" name="moeilijk" value="Te weinig tijd in een consultatie"><span>Te weinig tijd in een consultatie</span></label>
+      <label class="opt"><input type="checkbox" name="moeilijk" value="Andere"><span>Andere</span></label>
+      <input type="text" class="other" name="moeilijk_andere" data-for="moeilijk" placeholder="Wat vindt u moeilijk?" aria-label="Iets anders dat u moeilijk vindt" hidden>
+      <p class="error" aria-live="polite"></p>
+    </fieldset>
+
+    <div class="q" id="q-opmerkingen">
+      <label class="qt" for="opmerkingen">Wilt u ons nog iets meegeven? <span class="opt-label">(niet verplicht)</span></label>
+      <textarea id="opmerkingen" name="opmerkingen"></textarea>
+    </div>
+
+    <div class="hp" aria-hidden="true">
+      <label>Laat dit veld leeg <input type="text" name="extra_veld" tabindex="-1" autocomplete="off"></label>
+    </div>
+
+    <button type="submit" id="verzend">Verzenden</button>
+    <p id="status" role="alert"></p>
+
+    <footer>
+      <p>We gebruiken uw antwoorden alleen voor dit project. Hartelijk dank!<br>
+      Vragen? Mail naar <a href="mailto:info@de-kronkel.be">info@de-kronkel.be</a>.</p>
+    </footer>
+  </form>
+
+  <section id="bedankt" hidden>
+    <div class="check" aria-hidden="true">✓</div>
+    <h2>Hartelijk dank!</h2>
+    <p>Uw antwoorden zijn goed ontvangen.</p>
+    <p class="sign">Ruth Peeters en Wim Tops<br>Therapiepraktijk De Kronkel</p>
+  </section>
+
+</main>
+
+<script>
+  // ▼▼ Plak hier de URL van de Google Apps Script web-app (eindigt op /exec) ▼▼
+  const SCRIPT_URL = 'PLAK_HIER_DE_WEB_APP_URL';
+
+  const form = document.getElementById('form');
+  const netBlok = document.getElementById('netwerk-blok');
+  const knop = document.getElementById('verzend');
+  const status = document.getElementById('status');
+  let geprobeerd = false;
+
+  const vals = name => [...form.querySelectorAll(`input[name="${name}"]:checked`)].map(i => i.value);
+  const txt = name => (form.elements[name]?.value || '').trim();
+  const andereTekst = name => txt(name + '_andere');
+  const andereMist = name => vals(name).includes('Andere') && !andereTekst(name);
+  const metAndere = name => vals(name).map(v => v === 'Andere' ? 'Andere: ' + andereTekst(name) : v);
+  const inNetwerk = () => vals('deelname').includes('netwerk');
+
+  function syncUI() {
+    form.querySelectorAll('input.other').forEach(el => {
+      el.hidden = !vals(el.dataset.for).includes('Andere');
+    });
+    netBlok.hidden = !inNetwerk();
+    const n = vals('moeilijk').length;
+    form.querySelectorAll('input[name="moeilijk"]').forEach(i => { i.disabled = !i.checked && n >= 2; });
+    if (geprobeerd) valideer();
+  }
+
+  const regels = [
+    ['q-naam',       () => txt('naam'), 'Vul uw naam in.'],
+    ['q-beroep',     () => vals('beroep').length && !andereMist('beroep'),
+                     () => vals('beroep').length ? 'Vul bij “Andere” uw beroep in.' : 'Kies uw beroep.'],
+    ['q-praktijk',   () => txt('praktijk') && txt('gemeente'), 'Vul uw praktijk of organisatie én de gemeente in.'],
+    ['q-contact',    () => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(txt('email')), 'Vul een geldig e-mailadres in.'],
+    ['q-deelname',   () => vals('deelname').length, 'Kies minstens één manier om mee te doen.'],
+    ['q-klachten',   () => !inNetwerk() || (vals('klachten').length && !andereMist('klachten')),
+                     () => vals('klachten').length ? 'Vul bij “Andere” de klachten in.' : 'Kies minstens één soort klachten.'],
+    ['q-aanbod',     () => !inNetwerk() || (vals('aanbod').length && !andereMist('aanbod')),
+                     () => vals('aanbod').length ? 'Vul bij “Andere” uw aanbod in.' : 'Kies minstens één aanbod.'],
+    ['q-verwijzing', () => !inNetwerk() || txt('verwijzing'), 'Laat weten hoe collega’s naar u kunnen doorverwijzen.'],
+    ['q-wachttijd',  () => !inNetwerk() || vals('wachttijd').length, 'Kies een wachttijd.'],
+    ['q-kaart',      () => !inNetwerk() || vals('socialeKaart').length, 'Kies ja of nee.'],
+    ['q-moeilijk',   () => !andereMist('moeilijk'), 'Vul bij “Andere” in wat u moeilijk vindt.'],
+  ];
+
+  function valideer() {
+    let eerste = null;
+    for (const [id, test, msg] of regels) {
+      const box = document.getElementById(id);
+      const ok = !!test();
+      box.classList.toggle('invalid', !ok);
+      box.querySelector('.error').textContent = ok ? '' : (typeof msg === 'function' ? msg() : msg);
+      if (!ok && !eerste) eerste = box;
+    }
+    return eerste;
+  }
+
+  form.addEventListener('change', e => {
+    syncUI();
+    if (e.target.value === 'Andere' && e.target.checked) {
+      form.querySelector(`input.other[data-for="${e.target.name}"]`)?.focus();
+    }
+  });
+  form.addEventListener('input', () => { if (geprobeerd) valideer(); });
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    geprobeerd = true;
+    const fout = valideer();
+    if (fout) {
+      fout.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    const net = inNetwerk();
+    const data = {
+      extra_veld: txt('extra_veld'),
+      naam: txt('naam'),
+      beroep: metAndere('beroep')[0] || '',
+      praktijk: txt('praktijk'),
+      gemeente: txt('gemeente'),
+      email: txt('email'),
+      telefoon: txt('telefoon'),
+      deelname: vals('deelname'),
+      klachten: net ? metAndere('klachten') : [],
+      aanbod: net ? metAndere('aanbod') : [],
+      verwijzing: net ? txt('verwijzing') : '',
+      wachttijd: net ? (vals('wachttijd')[0] || '') : '',
+      socialeKaart: net ? (vals('socialeKaart')[0] || '') : '',
+      moeilijk: metAndere('moeilijk'),
+      opmerkingen: txt('opmerkingen'),
+    };
+
+    knop.disabled = true;
+    knop.textContent = 'Bezig met verzenden…';
+    status.textContent = '';
+
+    try {
+      if (SCRIPT_URL.startsWith('PLAK')) throw new Error('SCRIPT_URL is nog niet ingevuld');
+      // text/plain voorkomt een CORS-preflight, zodat Apps Script het verzoek aanvaardt
+      const res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(data),
+      });
+      const out = await res.json();
+      if (!out.ok) throw new Error(out.error || 'Onbekende fout');
+      form.hidden = true;
+      document.getElementById('bedankt').hidden = false;
+      window.scrollTo({ top: 0 });
+    } catch (err) {
+      console.error(err);
+      status.innerHTML = 'Het verzenden is niet gelukt. Probeer het nog eens, of mail uw antwoorden naar <a href="mailto:info@de-kronkel.be">info@de-kronkel.be</a>.';
+      knop.disabled = false;
+      knop.textContent = 'Verzenden';
+    }
+  });
+</script>
+</body>
+</html>
